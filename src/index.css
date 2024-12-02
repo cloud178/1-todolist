@@ -11,3 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.todolist {
+  background-color: burlywood;
+  border: 2px solid gray;
+  padding: 15px;
+  border-radius: 5px;
+}
