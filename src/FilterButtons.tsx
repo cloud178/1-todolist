@@ -1,5 +1,4 @@
 import React from 'react';
-import {Button} from "./Button";
 import {FilterValuesType} from "./App";
 
 type FilterButtonsPropsType = {
@@ -7,11 +6,15 @@ type FilterButtonsPropsType = {
 }
 
 export const FilterButtons = (props: FilterButtonsPropsType) => {
+   const onAllClickHandler = () => props.changeFilter("all")
+   const onActiveClickHandler = () => props.changeFilter("active")
+   const onCompletedClickHandler = () => props.changeFilter("completed")
+
     return (
         <div>
-            <button onClick={ () => {props.changeFilter("all")} }>All</button>
-            <button onClick={ () => {props.changeFilter("active")} }>Active</button>
-            <button onClick={ () => {props.changeFilter("completed")} }>Completed</button>
+            <button onClick={onAllClickHandler}>All</button>
+            <button onClick={onActiveClickHandler}>Active</button>
+            <button onClick={onCompletedClickHandler}>Completed</button>
         </div>
     )
 };
