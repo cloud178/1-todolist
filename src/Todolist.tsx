@@ -3,6 +3,7 @@ import {FilterValuesType, TaskType} from "./App";
 import {TodolistHeader} from "./TodolistHeader";
 import {AddForm} from "./AddForm";
 import {FilterButtons} from "./FilterButtons";
+import {Button} from "./Button";
 
 type TodolistPropsType = {
     title: string,
@@ -10,24 +11,31 @@ type TodolistPropsType = {
     removeTask: (id: string) => void,
     changeFilter: (value: FilterValuesType) => void,
     addTask: (title: string) => void,
+    changeTasksStatus: (taskId: string, isDone: boolean) => void
+    filter: string
 }
 
 export function Todolist(props: TodolistPropsType) {
 
     const [newTaskTitle, setNewTaskTitle] = useState("");
+    const [error, setError] = useState<null | string>(null);
 
     const onNewTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTaskTitle(e.currentTarget.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.ctrlKey && e.charCode === 13) {
-            props.addTask(newTaskTitle)
-            setNewTaskTitle("");
+        setError(null)
+        if (e.key === 'Enter' && e.ctrlKey) {
+            addTask()
         }
     }
     const addTask = () => {
-        props.addTask(newTaskTitle);
-        setNewTaskTitle("");
+        if (newTaskTitle.trim() !== '') {
+            props.addTask(newTaskTitle.trim());
+            setNewTaskTitle("");
+        } else {
+            setError('Title is required');
+        }
     }
 
     // conditional rendering
@@ -36,15 +44,23 @@ export function Todolist(props: TodolistPropsType) {
         : <ul>
             {
                 props.tasks.map(t => {
-                        const onRemoveHandler = () => {
+                        const onClickRemoveHandler = () => {
                             props.removeTask(t.id)
                         }
 
+                        const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                            props.changeTasksStatus(t.id, e.currentTarget.checked)
+                        }
+
                         return (
-                            <li key={t.id}>
-                                <input type="checkbox" checked={t.isDone}/>
+                            <li key={t.id} className={t.isDone ? 'is-done' : ''}>
+                                <input
+                                    type="checkbox"
+                                    checked={t.isDone}
+                                    onChange={onChangeHandler}
+                                />
                                 <span>{t.title}</span>
-                                <button onClick={onRemoveHandler}>x</button>
+                                <button onClick={onClickRemoveHandler}>x</button>
                             </li>
                         )
                     }
@@ -58,13 +74,13 @@ export function Todolist(props: TodolistPropsType) {
                 <TodolistHeader title={props.title}/>
                 <input value={newTaskTitle}
                        onChange={onNewTitleChangeHandler}
-                       onKeyPress={onKeyPressHandler}
+                       onKeyDown={onKeyPressHandler}
+                       className={error ? 'error': ''}
                 />
                 <button onClick={addTask}>+</button>
-                {
-                    tasksList
-                }
-                <FilterButtons changeFilter={props.changeFilter}/>
+                {error && <div className='error-message'>{error}</div>}
+                {tasksList}
+                <FilterButtons filter={props.filter} changeFilter={props.changeFilter}/>
             </div>
         </div>
     )
