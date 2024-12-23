@@ -16,16 +16,13 @@ function App() {
     const todolistTitle = "What to learn"
 
     const [tasks, setTasks] = useState<Array<TaskType>>([
-        {id: v1(), title: "HTML&CSS", isDone: true},
+        {id: v1(), title: "HTML&CSS", isDone: true}, // 'done', 'in progress', 'paused'
         {id: v1(), title: "JS/TS", isDone: true},
         {id: v1(), title: "React", isDone: false},
     ])
 
-    const removeTask = (taskId: string) => {
-        const nextState: TaskType[] = tasks.filter(t => t.id !== taskId)
-        setTasks(nextState)
-    }
-
+    //CRUD logic
+    // Create
     const addTask = (title: string) => {
         const newTask: TaskType = {
             id: v1(),
@@ -36,8 +33,24 @@ function App() {
         setTasks(nextState)
     }
 
+    // Update-1
+    const changeTaskStatus = (taskId: string, newStatus: boolean) => {
+        const nextState: TaskType[] = tasks.map((t): TaskType  =>
+            t.id === taskId
+                ? {...t, isDone: newStatus}
+                : t
+        );
+        setTasks(nextState);
+    }
 
-    // UI
+    // Delete
+    const removeTask = (taskId: string) => {
+        const nextState: TaskType[] = tasks.filter(t => t.id !== taskId)
+        setTasks(nextState)
+    }
+
+    // GUI (Read) ------ Graphical User Interface
+    // UI Data
     const [filter, setNextFilter] = React.useState<FilterValuesType>("all")
 
     const changeTodolistFilter = (nextFilter: FilterValuesType) => {
@@ -61,6 +74,8 @@ function App() {
                 removeTask={removeTask}
                 changeTodolistFilter={changeTodolistFilter}
                 addTask={addTask}
+                changeTaskStatus={changeTaskStatus}
+                filter={filter}
             />
         </div>
     );

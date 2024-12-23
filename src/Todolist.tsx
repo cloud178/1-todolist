@@ -10,22 +10,34 @@ type TodolistPropsTYpe = {
     tasks: Array<TaskType>,
     removeTask: (TaskId: string) => void,
     changeTodolistFilter: (nextFilter: FilterValuesType) => void,
-    addTask: (title: string) => void
+    addTask: (title: string) => void,
+    changeTaskStatus: (taskId: string, newStatus: boolean) => void,
+    filter: FilterValuesType,
 }
 
 export function Todolist(props: TodolistPropsTYpe) {
 
     const [taskTitle, setTaskTitle] = useState("")
+    const [error, setError] = useState<boolean>(false)
 
     // conditional rendering
     const tasksList = props.tasks.length === 0
         ? <span>Your todolist is empty</span>
         : <ul>
             {props.tasks.map(t => {
+
+                const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                    props.changeTaskStatus(t.id, e.currentTarget.checked)
+                }
+
                 return (
                     <li key={t.id}>
-                        <input type="checkbox" checked={t.isDone}/>
-                        <span>{t.title}</span>
+                        <input
+                            type="checkbox"
+                            checked={t.isDone}
+                            onChange={changeTaskStatusHandler}
+                        />
+                        <span className={t.isDone ? 'task-done' : 'task'}>{t.title}</span>
                         <Button title={"x"} onClickHandler={() => props.removeTask(t.id)}/>
                     </li>
                 )
@@ -36,11 +48,19 @@ export function Todolist(props: TodolistPropsTYpe) {
 
     // handlers
     const addTaskHandler = () => {
-        props.addTask(taskTitle)
+        const trimmedTitle = taskTitle.trim()
+        if (trimmedTitle) {
+            props.addTask(trimmedTitle)
+        } else {
+            setError(true)
+        }
         setTaskTitle("")
     }
 
-    const setLocalTitleHandler = (e: ChangeEvent<HTMLInputElement>) => setTaskTitle(e.currentTarget.value)
+    const setLocalTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        error && setError(false)
+        setTaskTitle(e.currentTarget.value)
+    }
 
     const onKeyDownAddTaskHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if ((taskTitle.length && isAddTaskPossible) && e.key === "Enter") {
@@ -56,35 +76,31 @@ export function Todolist(props: TodolistPropsTYpe) {
                 <div>
                     <input
                         value={taskTitle}
-                        onChange={ setLocalTitleHandler }
-                        onKeyDown={ onKeyDownAddTaskHandler }
+                        onChange={setLocalTitleHandler}
+                        onKeyDown={onKeyDownAddTaskHandler}
+                        className={error ? 'input-error' : ''}
                     />
                     <Button
                         title={"+"}
                         onClickHandler={addTaskHandler}
-                        isBtnDisabled={ !taskTitle.length || !isAddTaskPossible}
+                        isBtnDisabled={!taskTitle.length || !isAddTaskPossible}
                     />
                 </div>
                 {!isAddTaskPossible && <div>Task title is too long</div>}
                 {!taskTitle.length && <div>Enter task title (max 15 chars)</div>}
+                {error && <div style={{color: 'red'}}>Task title is required</div>}
                 {tasksList}
-                <FilterButtons changeTodolistFilter={props.changeTodolistFilter}/>
+                <FilterButtons
+                    filter={props.filter}
+                    changeTodolistFilter={props.changeTodolistFilter}
+                />
             </div>
         </div>
     );
 }
 
 
-
-
-
-
-
-
-
-
-
-    // const taskInputRef = React.useRef<HTMLInputElement>(null);
+// const taskInputRef = React.useRef<HTMLInputElement>(null);
 
 // <div>
 //     <input
