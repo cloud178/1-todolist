@@ -6,13 +6,14 @@ import {FilterButtons} from "./FilterButtons";
 import {Button} from "./Button";
 
 type TodolistPropsType = {
-    title: string,
-    tasks: Array<TaskType>,
-    removeTask: (id: string) => void,
-    changeFilter: (value: FilterValuesType) => void,
-    addTask: (title: string) => void,
+    id: string
+    title: string
+    tasks: Array<TaskType>
+    removeTask: (id: string) => void
+    changeFilter: (value: FilterValuesType, todolistId: string) => void
+    addTask: (title: string) => void
     changeTasksStatus: (taskId: string, isDone: boolean) => void
-    filter: string
+    filter: FilterValuesType
 }
 
 export function Todolist(props: TodolistPropsType) {
@@ -80,7 +81,7 @@ export function Todolist(props: TodolistPropsType) {
                 <button onClick={addTask}>+</button>
                 {error && <div className='error-message'>{error}</div>}
                 {tasksList}
-                <FilterButtons filter={props.filter} changeFilter={props.changeFilter}/>
+                <FilterButtons filter={props.filter} changeFilter={props.changeFilter} todolistId={props.id}/>
             </div>
         </div>
     )

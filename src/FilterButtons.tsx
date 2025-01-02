@@ -2,14 +2,15 @@ import React from 'react';
 import {FilterValuesType} from "./App";
 
 type FilterButtonsPropsType = {
-    changeFilter: (value: FilterValuesType) => void,
+    changeFilter: (value: FilterValuesType, todolistId: string) => void
     filter: string
+    todolistId: string
 }
 
 export const FilterButtons = (props: FilterButtonsPropsType) => {
-    const onAllClickHandler = () => props.changeFilter("all")
-    const onActiveClickHandler = () => props.changeFilter("active")
-    const onCompletedClickHandler = () => props.changeFilter("completed")
+    const onAllClickHandler = () => props.changeFilter("all", props.todolistId)
+    const onActiveClickHandler = () => props.changeFilter("active", props.todolistId)
+    const onCompletedClickHandler = () => props.changeFilter("completed", props.todolistId)
 
     return (
         <div>
