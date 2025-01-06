@@ -9,11 +9,12 @@ type TodolistPropsType = {
     id: string
     title: string
     tasks: Array<TaskType>
-    removeTask: (id: string) => void
+    removeTask: (id: string, todolistId: string) => void
     changeFilter: (value: FilterValuesType, todolistId: string) => void
-    addTask: (title: string) => void
-    changeTasksStatus: (taskId: string, isDone: boolean) => void
+    addTask: (title: string, todolistId: string) => void
+    changeTasksStatus: (taskId: string, isDone: boolean, todolistId: string) => void
     filter: FilterValuesType
+    removeTodolist: (todolistId: string) => void
 }
 
 export function Todolist(props: TodolistPropsType) {
@@ -32,7 +33,7 @@ export function Todolist(props: TodolistPropsType) {
     }
     const addTask = () => {
         if (newTaskTitle.trim() !== '') {
-            props.addTask(newTaskTitle.trim());
+            props.addTask(newTaskTitle.trim(), props.id);
             setNewTaskTitle("");
         } else {
             setError('Title is required');
@@ -46,11 +47,11 @@ export function Todolist(props: TodolistPropsType) {
             {
                 props.tasks.map(t => {
                         const onClickRemoveHandler = () => {
-                            props.removeTask(t.id)
+                            props.removeTask(t.id, props.id)
                         }
 
                         const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                            props.changeTasksStatus(t.id, e.currentTarget.checked)
+                            props.changeTasksStatus(t.id, e.currentTarget.checked, props.id)
                         }
 
                         return (
@@ -72,7 +73,7 @@ export function Todolist(props: TodolistPropsType) {
     return (
         <div className="todolist">
             <div>
-                <TodolistHeader title={props.title}/>
+                <TodolistHeader title={props.title} todolistId={props.id} callback={props.removeTodolist}/>
                 <input value={newTaskTitle}
                        onChange={onNewTitleChangeHandler}
                        onKeyDown={onKeyPressHandler}
