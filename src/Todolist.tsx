@@ -1,9 +1,8 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent} from 'react';
 import {FilterValuesType, TaskType} from "./App";
 import {TodolistHeader} from "./TodolistHeader";
-import {AddForm} from "./AddForm";
 import {FilterButtons} from "./FilterButtons";
-import {Button} from "./Button";
+import {AddItemForm} from "./AddItemForm";
 
 type TodolistPropsType = {
     id: string
@@ -18,27 +17,6 @@ type TodolistPropsType = {
 }
 
 export function Todolist(props: TodolistPropsType) {
-
-    const [newTaskTitle, setNewTaskTitle] = useState("");
-    const [error, setError] = useState<null | string>(null);
-
-    const onNewTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setNewTaskTitle(e.currentTarget.value)
-    }
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
-        if (e.key === 'Enter' && e.ctrlKey) {
-            addTask()
-        }
-    }
-    const addTask = () => {
-        if (newTaskTitle.trim() !== '') {
-            props.addTask(newTaskTitle.trim(), props.id);
-            setNewTaskTitle("");
-        } else {
-            setError('Title is required');
-        }
-    }
 
     // conditional rendering
     const tasksList = props.tasks.length === 0
@@ -70,21 +48,18 @@ export function Todolist(props: TodolistPropsType) {
             }
         </ul>
 
+    const addTask = (title: string) => {
+        props.addTask(title, props.id)
+    }
+
     return (
         <div className="todolist">
             <div>
                 <TodolistHeader title={props.title} todolistId={props.id} callback={props.removeTodolist}/>
-                <input value={newTaskTitle}
-                       onChange={onNewTitleChangeHandler}
-                       onKeyDown={onKeyPressHandler}
-                       className={error ? 'error': ''}
-                />
-                <button onClick={addTask}>+</button>
-                {error && <div className='error-message'>{error}</div>}
+                <AddItemForm addItem={addTask}/>
                 {tasksList}
                 <FilterButtons filter={props.filter} changeFilter={props.changeFilter} todolistId={props.id}/>
             </div>
         </div>
     )
-        ;
 };
