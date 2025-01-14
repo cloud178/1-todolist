@@ -26,7 +26,7 @@ export function Todolist(props: TodolistPropsType) {
     // conditional rendering
     const tasksList = props.tasks.length === 0
         ? <span>Your todolist is empty</span>
-        : <ul>
+        : <div>
             {
                 props.tasks.map(t => {
                         const onClickRemoveHandler = () => {
@@ -42,7 +42,7 @@ export function Todolist(props: TodolistPropsType) {
                         }
 
                         return (
-                            <li key={t.id} className={t.isDone ? 'is-done' : ''}>
+                            <div key={t.id} className={t.isDone ? 'is-done' : ''}>
                                 {/*<input*/}
                                 {/*    type="checkbox"*/}
                                 {/*    checked={t.isDone}*/}
@@ -57,12 +57,12 @@ export function Todolist(props: TodolistPropsType) {
                                 <IconButton onClick={onClickRemoveHandler}>
                                     <Delete/>
                                 </IconButton>
-                            </li>
+                            </div>
                         )
                     }
                 )
             }
-        </ul>
+        </div>
 
     const addTask = (title: string) => {
         props.addTask(title, props.id)
