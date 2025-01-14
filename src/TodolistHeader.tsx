@@ -1,5 +1,8 @@
 import {Button} from "./Button";
 import {EditableSpan} from "./EditableSpan";
+import {Delete} from "@mui/icons-material";
+import {IconButton} from "@mui/material";
+import React from "react";
 
 type TodolistHeaderPropsType = {
     title: string
@@ -27,7 +30,10 @@ export const TodolistHeader = ({
     return (
         <h3>
             <EditableSpan title={title} onChange={chnageTodolistTitle}/>
-            <Button title={'x'} callback={deleteTodolistHandler}/>
+            {/*<Button title={'x'} callback={deleteTodolistHandler}/>*/}
+            <IconButton onClick={deleteTodolistHandler}>
+                <Delete/>
+            </IconButton>
         </h3>
     )
 }

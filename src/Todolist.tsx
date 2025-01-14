@@ -4,6 +4,8 @@ import {TodolistHeader} from "./TodolistHeader";
 import {FilterButtons} from "./FilterButtons";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
+import {Checkbox, IconButton} from "@mui/material";
+import {Delete} from '@mui/icons-material';
 
 type TodolistPropsType = {
     id: string
@@ -41,13 +43,20 @@ export function Todolist(props: TodolistPropsType) {
 
                         return (
                             <li key={t.id} className={t.isDone ? 'is-done' : ''}>
-                                <input
-                                    type="checkbox"
+                                {/*<input*/}
+                                {/*    type="checkbox"*/}
+                                {/*    checked={t.isDone}*/}
+                                {/*    onChange={onChangeStatusHandler}*/}
+                                {/*/>*/}
+                                <Checkbox
                                     checked={t.isDone}
                                     onChange={onChangeStatusHandler}
                                 />
                                 <EditableSpan title={t.title} onChange={onChangeTitleHandler}/>
-                                <button onClick={onClickRemoveHandler}>x</button>
+                                {/*<button onClick={onClickRemoveHandler}>x</button>*/}
+                                <IconButton onClick={onClickRemoveHandler}>
+                                    <Delete/>
+                                </IconButton>
                             </li>
                         )
                     }
