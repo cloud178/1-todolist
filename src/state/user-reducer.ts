@@ -22,7 +22,13 @@ export const userReducer = (state: StateType, action: ActionType): StateType => 
                 childrenCount: state.childrenCount + 1
             }
 
-            default:
-                throw new Error("I don't understand this action type")
+        case 'CHANGE-NAME':
+            return {
+                ...state,
+                name: action.newName,
+            }
+
+        default:
+            throw new Error("I don't understand this action type")
     }
 }
