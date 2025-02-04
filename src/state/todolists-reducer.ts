@@ -33,8 +33,8 @@ export const todolistsReducer = (state: TodolistType[], action: ActionsType): To
         }
         case 'ADD-TODOLIST': {
             return [
+                {id: action.todolistId, title: action.title, filter: 'all'},
                 ...state,
-                {id: action.todolistId, title: action.title, filter: 'all'}
             ]
         }
         case 'CHANGE-TODOLIST-TITLE': {

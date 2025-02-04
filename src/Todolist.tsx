@@ -15,10 +15,10 @@ type TodolistPropsType = {
     title: string
     tasks: Array<TaskType>
     removeTask: (todolistId: string, id: string) => void
-    changeFilter: (value: FilterValuesType, todolistId: string) => void
+    changeFilter: (todolistId: string, value: FilterValuesType) => void
     addTask: (todolistId: string, title: string) => void
     changeTasksStatus: (todolistId: string, taskId: string, isDone: boolean) => void
-    changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
+    changeTaskTitle: (todolistId: string, taskId: string, newTitle: string) => void
     filter: FilterValuesType
     removeTodolist: (todolistId: string) => void
     changeTodolistTitle: (todolistId: string, newTitle: string) => void
@@ -41,7 +41,7 @@ export function Todolist(props: TodolistPropsType) {
                         }
 
                         const onChangeTitleHandler = (newTitle: string) => {
-                            props.changeTaskTitle(t.id, newTitle, props.id)
+                            props.changeTaskTitle(props.id, t.id, newTitle)
                         }
 
                         return (
