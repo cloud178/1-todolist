@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import React from 'react';
-import {FilterValuesType} from "./App";
+import {FilterValuesType} from "./AppWithRedux";
 
 type FilterButtonsPropsType = {
     changeFilter: (todolistId: string, value: FilterValuesType) => void
