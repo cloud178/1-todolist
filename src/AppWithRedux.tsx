@@ -1,7 +1,6 @@
-import React, {useReducer} from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {Todolist} from "./Todolist";
-import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid2, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import {Menu} from '@mui/icons-material';
@@ -9,10 +8,8 @@ import {
     addTodolistAC,
     changeTodolistFilterAC,
     changeTodolistTitleAC,
-    removeTodolistAC,
-    todolistsReducer
+    removeTodolistAC
 } from "./state/todolists-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./state/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootState} from "./state/store";
 
@@ -34,12 +31,18 @@ export type TasksStateType = {
     [key: string]: TaskType[]
 }
 
-function AppWithRedux() {
+// const Fake = React.memo( (props: any) => {
+//     console.log('Fake is called')
+//     return (
+//         <h1>{props.count}</h1>
+//     )
+// })
 
+function AppWithRedux() {
+    console.log('App is called');
     const dispatch = useDispatch();
 
     const todolists = useSelector<AppRootState, TodolistType[]>( state => state.todolists )
-
 
     function changeFilter(todolistId: string, value: FilterValuesType) {
         dispatch(changeTodolistFilterAC(todolistId, value))
@@ -50,10 +53,10 @@ function AppWithRedux() {
         dispatch(action)
     }
 
-    function addTodolist(title: string) {
+    const addTodolist = useCallback ((title: string) => {
         const action = addTodolistAC(title)
         dispatch(action)
-    }
+    }, [])
 
     const changeTodolistTitle = (todolistId: string, title: string) => {
         dispatch(changeTodolistTitleAC(todolistId, title))
@@ -74,14 +77,12 @@ function AppWithRedux() {
             </AppBar>
             <Container fixed>
                 <Grid2 container style={{padding: '10px'}}>
-                    <AddItemForm addItem={addTodolist}/>
+                    <AddItemForm addItem={addTodolist} />
+                    {/*<Fake count={10}/>*/}
                 </Grid2>
                 <Grid2 container spacing={3}>
                     {
                         todolists.map(tl => {
-
-
-
                             return (
                                 <Grid2 key={tl.id}>
                                     <Paper elevation={4} style={{padding: "10px"}}>

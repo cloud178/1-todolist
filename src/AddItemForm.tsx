@@ -1,13 +1,14 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
-import {Button, IconButton, TextField} from "@mui/material";
+import {IconButton, TextField} from "@mui/material";
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import {addTodolistAC} from "./state/todolists-reducer";
 
 export type AddItemFormType = {
     addItem: (title: string) => void
 }
 
-export function AddItemForm(props: AddItemFormType) {
-
+export const AddItemForm = React.memo( (props: AddItemFormType) => {
+    console.log('AddItemForm is called')
     const [newTaskTitle, setNewTaskTitle] = useState("");
     const [error, setError] = useState<null | string>(null);
 
@@ -15,7 +16,7 @@ export function AddItemForm(props: AddItemFormType) {
         setNewTaskTitle(e.currentTarget.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
+        error && setError(null)
         if (e.key === 'Enter' && e.ctrlKey) {
             addTask()
         }
@@ -55,4 +56,4 @@ export function AddItemForm(props: AddItemFormType) {
             {/*{error && <div className='error-message'>{error}</div>}*/}
         </div>
     )
-}
+} )
