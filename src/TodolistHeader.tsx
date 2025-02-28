@@ -2,7 +2,7 @@ import {Button} from "./Button";
 import {EditableSpan} from "./EditableSpan";
 import {Delete} from "@mui/icons-material";
 import {IconButton} from "@mui/material";
-import React from "react";
+import React, {useCallback} from "react";
 
 type TodolistHeaderPropsType = {
     title: string
@@ -22,9 +22,9 @@ export const TodolistHeader = ({
         deleteTodolist(todolistId)
     }
 
-    const chnageTodolistTitle = (newTitle: string) => {
+    const chnageTodolistTitle = useCallback( (newTitle: string) => {
         changeTodolistTitle(todolistId, newTitle)
-    }
+    }, [changeTodolistTitle, todolistId])
 
 
     return (

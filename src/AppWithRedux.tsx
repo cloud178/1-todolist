@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, {useCallback, useMemo, useReducer} from 'react';
 import './App.css';
 import {Todolist} from "./Todolist";
 import {v1} from "uuid";
@@ -34,47 +34,57 @@ export type TasksStateType = {
     [key: string]: TaskType[]
 }
 
+// type FakeType = {
+//     counter: number
+// }
+//
+// const Fake = React.memo( ({counter}: FakeType) => {
+//     console.log('Fake is called')
+//     return <h1>{counter}</h1>
+// })
+
 function AppWithRedux() {
+    console.log('App is called')
 
     const dispatch = useDispatch();
 
-    const todolists = useSelector<AppRootState, TodolistType[]>( state => state.todolists )
-    const tasks = useSelector<AppRootState, TasksStateType>( state => state.tasks )
+    const todolists = useSelector<AppRootState, TodolistType[]>(state => state.todolists)
+    const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks)
 
 
-    function removeTask(todolistId: string, id: string) {
+    const removeTask = useCallback((todolistId: string, id: string) => {
         dispatch(removeTaskAC(todolistId, id))
-    }
+    }, [dispatch])
 
-    function addTask(todolistId: string, title: string) {
+    const addTask = useCallback((todolistId: string, title: string) => {
         dispatch(addTaskAC(todolistId, title))
-    }
+    }, [dispatch])
 
-    const changeStatus = (todolistId: string, taskId: string, isDone: boolean) => {
+    const changeStatus = useCallback((todolistId: string, taskId: string, isDone: boolean) => {
         dispatch(changeTaskStatusAC(todolistId, taskId, isDone))
-    }
+    }, [dispatch])
 
-    const changeTaskTitle = (todolistId: string, taskId: string, newTitle: string) => {
+    const changeTaskTitle = useCallback((todolistId: string, taskId: string, newTitle: string) => {
         dispatch(changeTaskTitleAC(todolistId, taskId, newTitle))
-    }
+    }, [dispatch])
 
-    function changeFilter(todolistId: string, value: FilterValuesType) {
+    const changeFilter = useCallback((todolistId: string, value: FilterValuesType) => {
         dispatch(changeTodolistFilterAC(todolistId, value))
-    }
+    }, [dispatch])
 
-    const removeTodolist = (todolistId: string) => {
+    const removeTodolist = useCallback((todolistId: string) => {
         const action = removeTodolistAC(todolistId)
         dispatch(action)
-    }
+    }, [dispatch])
 
-    function addTodolist(title: string) {
+    const addTodolist = useCallback((title: string) => {
         const action = addTodolistAC(title)
         dispatch(action)
-    }
+    }, [dispatch])
 
-    const changeTodolistTitle = (todolistId: string, title: string) => {
+    const changeTodolistTitle = useCallback((todolistId: string, title: string) => {
         dispatch(changeTodolistTitleAC(todolistId, title))
-    }
+    }, [dispatch])
 
     return (
         <div className="App">
@@ -92,18 +102,19 @@ function AppWithRedux() {
             <Container fixed>
                 <Grid2 container style={{padding: '10px'}}>
                     <AddItemForm addItem={addTodolist}/>
+                    {/*<Fake counter={10} />*/}
                 </Grid2>
                 <Grid2 container spacing={3}>
                     {
                         todolists.map(tl => {
 
                             let tasksForTodolist = tasks[tl.id];
-                            if (tl.filter === "completed") {
-                                tasksForTodolist = tasksForTodolist.filter(t => t.isDone)
-                            }
-                            if (tl.filter === "active") {
-                                tasksForTodolist = tasksForTodolist.filter(t => !t.isDone)
-                            }
+                            // if (tl.filter === "completed") {
+                            //     tasksForTodolist = tasksForTodolist.filter(t => t.isDone)
+                            // }
+                            // if (tl.filter === "active") {
+                            //     tasksForTodolist = tasksForTodolist.filter(t => !t.isDone)
+                            // }
 
                             return (
                                 <Grid2 key={tl.id}>

@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import React from 'react';
+import React, { useCallback } from 'react';
 import {FilterValuesType} from "./App";
 
 type FilterButtonsPropsType = {
@@ -9,9 +9,9 @@ type FilterButtonsPropsType = {
 }
 
 export const FilterButtons = (props: FilterButtonsPropsType) => {
-    const onAllClickHandler = () => props.changeFilter(props.todolistId, "all")
-    const onActiveClickHandler = () => props.changeFilter(props.todolistId, "active")
-    const onCompletedClickHandler = () => props.changeFilter(props.todolistId, "completed")
+    const onAllClickHandler = useCallback( () => props.changeFilter(props.todolistId, "all"), [props.changeFilter, props.todolistId])
+    const onActiveClickHandler = useCallback( () => props.changeFilter(props.todolistId, "active"), [props.changeFilter, props.todolistId])
+    const onCompletedClickHandler = useCallback( () => props.changeFilter(props.todolistId, "completed"), [props.changeFilter, props.todolistId])
 
     return (
         <div>
